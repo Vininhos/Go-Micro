@@ -1,1 +1,6 @@
 *.code-workspace
+*.wt
+*.lock
+*.turtle
+WiredTiger
+*.bson
