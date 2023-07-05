@@ -61,7 +61,7 @@ func (app *Config) logRequest(name, data string) error {
 	jsonData, _ := json.MarshalIndent(entry, "", "\t")
 	logServiceURL := "http://logger-service/log"
 
-	request, err := http.NewRequest("POST", logServiceURL, bytes.NewBuffer(jsonData))
+	request, err := http.NewRequest(http.MethodPost, logServiceURL, bytes.NewBuffer(jsonData))
 	if err != nil {
 		return err
 	}
