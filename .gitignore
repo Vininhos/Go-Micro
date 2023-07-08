@@ -4,3 +4,4 @@
 *.turtle
 WiredTiger
 *.bson
+project/db-data/*
