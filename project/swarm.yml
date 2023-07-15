@@ -1,11 +1,26 @@
 version: '3'
 
 services:
-  front-end:
-    image: viniciusrw/front-end:1.0.0
+
+  caddy:
+    image: viniciusrw/micro-caddy:1.0.0
     deploy:
       mode: replicated
       replicas: 1
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+    ports:
+      - "80:80"
+      - "443:443"
+
+  front-end:
+    image: viniciusrw/front-end:1.0.1
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      BROKER_URL: "http://backend"
 
   broker-service:
     image: viniciusrw/broker-service:1.0.1
@@ -74,7 +89,7 @@ services:
       - ./db-data/mongo/:/data/db
 
   postgres:
-      image: 'postgres:14.0'
+      image: 'postgres:14.2'
       ports:
         - "5432:5432"
       deploy:
@@ -85,4 +100,9 @@ services:
         POSTGRES_PASSWORD: password
         POSTGRES_DB: users
       volumes:
-        - ./db-data/postgres/:/var/lib/postgresql/data/ 
+        - ./db-data/postgres/:/var/lib/postgresql/data/
+
+volumes:
+  caddy_data:
+    external: true
+  caddy_config:
