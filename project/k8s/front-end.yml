@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: broker-service
+  name: front-end
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: broker-service
+      app: front-end
   template:
     metadata:
       labels:
-        app: broker-service
+        app: front-end
     spec:
       containers:
-        - name: broker-service
-          image: "viniciusrw/broker-service:1.0.1"
+        - name: front-end
+          image: "viniciusrw/front-end:1.0.1"
           ports:
-            - containerPort: 8080
+            - containerPort: 8081
           resources:
             requests:
               memory: "64Mi"
@@ -24,16 +24,19 @@ spec:
             limits:
               memory: "128Mi"
               cpu: "500m"
+          env:
+            - name: BROKER_URL
+              value: "http://broker-service.info"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: broker-service
+  name: front-end
 spec:
   selector:
-    app: broker-service
+    app: front-end
   ports:
     - protocol: TCP
       name: main-port
-      port: 8080
-      targetPort: 8080
+      port: 8081
+      targetPort: 8081
